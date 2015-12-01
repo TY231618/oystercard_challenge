@@ -4,11 +4,12 @@ CARD_LIMIT = 90
 MIN_LIMIT = 1
 FARE = 1
 
-  attr_reader :balance, :in_use
+  attr_reader :balance, :in_use, :entry_station
 
   def initialize
     @balance = 0
     @in_use = false
+    @entry_station = entry_station
   end
 
   def top_up(amount)
@@ -20,15 +21,18 @@ FARE = 1
     @in_use
   end
 
-  def touch_in
+  def touch_in(station)
     fail 'not enough money on card' if min_limit
     @in_use = true
+    @entry_station = station
   end
 
   def touch_out
     deduct(FARE)
     @in_use = false
+    @entry_station = nil
   end
+
 
   private
 

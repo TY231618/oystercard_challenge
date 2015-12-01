@@ -1,7 +1,10 @@
 require 'oystercard'
 
+
+
 describe Oystercard do
 subject(:oystercard) { described_class.new }
+let(:station) {double :station}
 
   describe '#balance' do
     it 'shows the card balance' do
@@ -41,23 +44,29 @@ subject(:oystercard) { described_class.new }
   describe '#touch_in' do
     it 'can touch in' do
       oystercard.top_up(20)
-      oystercard.touch_in
+      oystercard.touch_in(station)
       expect(oystercard).to be_in_journey
     end
 
     it 'prevents tap in when funds are too low' do
-      expect { oystercard.touch_in }.to raise_error 'not enough money on card'
+      expect { oystercard.touch_in(station) }.to raise_error 'not enough money on card'
     end
 
     it 'takes off fare on touch out' do
       expect{ oystercard.touch_out }.to change{ oystercard.balance }.by(-Oystercard::FARE)
+    end
+
+    it 'stores the entry station' do
+      oystercard.top_up(20)
+      oystercard.touch_in(station)
+      expect(oystercard.entry_station).to eq station
     end
   end
 
   describe '#touch_out' do
     it 'can touch out' do
       oystercard.top_up(20)
-      oystercard.touch_in
+      oystercard.touch_in(station)
       oystercard.touch_out
       expect(oystercard).not_to be_in_journey
     end

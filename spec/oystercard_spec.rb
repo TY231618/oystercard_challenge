@@ -31,4 +31,27 @@ subject(:oystercard) { described_class.new }
       expect{ oystercard.deduct(1)}.to change { oystercard.balance }.by(-1)
     end
   end
+
+  describe '#in_journey?' do
+    it 'is initially not in a journey' do
+      expect(oystercard).not_to be_in_journey
+    end
+  end
+
+  describe '#touch_in' do
+    it 'can touch in' do
+      oystercard.top_up(20)
+      oystercard.touch_in
+      expect(oystercard).to be_in_journey
+    end
+  end
+
+  describe '#touch_out' do
+    it 'can touch out' do
+      oystercard.touch_in
+      oystercard.touch_out
+      expect(oystercard).not_to be_in_journey
+    end
+  end
+
 end

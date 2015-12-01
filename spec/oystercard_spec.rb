@@ -23,14 +23,14 @@ subject(:oystercard) { described_class.new }
     end
   end
 
-  describe '#deduct' do
-    #it { is_expected.to respond_to(:deduct).with(1).argument }
-
-    it 'allows funds to be deducted' do
-      #oystercard.top_up(1)
-      expect{ oystercard.deduct(1)}.to change { oystercard.balance }.by(-1)
-    end
-  end
+  # describe '#deduct' do
+  #   #it { is_expected.to respond_to(:deduct).with(1).argument }
+  #   #
+  #   # it 'allows funds to be deducted' do
+  #   #   #oystercard.top_up(10)
+  #   #   #expect{ oystercard.deduct(1) }.to change { oystercard.balance }.by(-1)
+  #   # end
+  # end
 
   describe '#in_journey?' do
     it 'is initially not in a journey' do
@@ -48,6 +48,10 @@ subject(:oystercard) { described_class.new }
     it 'prevents tap in when funds are too low' do
       expect { oystercard.touch_in }.to raise_error 'not enough money on card'
     end
+
+    it 'takes off fare on touch out' do
+      expect{ oystercard.touch_out }.to change{ oystercard.balance }.by(-Oystercard::FARE)
+    end
   end
 
   describe '#touch_out' do
@@ -57,6 +61,7 @@ subject(:oystercard) { described_class.new }
       oystercard.touch_out
       expect(oystercard).not_to be_in_journey
     end
+
   end
 
 end

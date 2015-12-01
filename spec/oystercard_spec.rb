@@ -44,10 +44,15 @@ subject(:oystercard) { described_class.new }
       oystercard.touch_in
       expect(oystercard).to be_in_journey
     end
+
+    it 'prevents tap in when funds are too low' do
+      expect { oystercard.touch_in }.to raise_error 'not enough money on card'
+    end
   end
 
   describe '#touch_out' do
     it 'can touch out' do
+      oystercard.top_up(20)
       oystercard.touch_in
       oystercard.touch_out
       expect(oystercard).not_to be_in_journey

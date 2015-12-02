@@ -17,3 +17,10 @@
 #
 #   end
 # end
+describe 'User stories' do
+it 'returns the zone of given station ' do
+  station = Station.new
+  expect(station.zone('Balham')).to eq 3
+
+end
+end

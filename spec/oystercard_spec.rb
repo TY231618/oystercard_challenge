@@ -10,6 +10,7 @@ let(:entry_station2) {double :station}
 let(:exit_station2) {double :station}
 
 
+
   describe '#balance' do
     it 'shows the card balance' do
       expect(oystercard.balance).to eq 0
@@ -84,7 +85,7 @@ let(:exit_station2) {double :station}
       oystercard.touch_out(exit_station)
       oystercard.touch_in(entry_station2)
       oystercard.touch_out(exit_station2)
-      expect(oystercard.journeys['entry']).to eq entry_station2
+      expect(oystercard.journey_hist[2]).to eq [entry_station2, exit_station2]
     end
   end
 end

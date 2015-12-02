@@ -1,4 +1,5 @@
 require 'oystercard'
+require 'journey'
 
 
 
@@ -58,6 +59,8 @@ let(:exit_station2) {double :station}
     end
 
     it 'takes off fare on touch out' do
+      oystercard.top_up(50)
+      oystercard.touch_in(entry_station)
       expect{ oystercard.touch_out(exit_station) }.to change{ oystercard.balance }.by(-Oystercard::FARE)
     end
 
@@ -77,15 +80,5 @@ let(:exit_station2) {double :station}
     end
 
   end
-  describe '#journeys_log' do
-
-    it 'logs journeys' do
-      oystercard.top_up(20)
-      oystercard.touch_in(entry_station)
-      oystercard.touch_out(exit_station)
-      oystercard.touch_in(entry_station2)
-      oystercard.touch_out(exit_station2)
-      expect(oystercard.journey_hist[2]).to eq [entry_station2, exit_station2]
-    end
-  end
+  
 end

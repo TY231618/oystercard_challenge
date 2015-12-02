@@ -23,4 +23,11 @@ it 'returns the zone of given station ' do
   expect(station.zone('Balham')).to eq 3
 
 end
+
+it 'returns history log' do
+      journey = Journey.new
+      journey.start("Victoria")
+      journey.end("Camden")
+      expect(journey.journey_log[1]).to eq ["Victoria", "Camden"]
+    end
 end

@@ -1,13 +1,16 @@
+require_relative 'journey'
 class Oystercard
 
 CARD_LIMIT = 90
 MIN_LIMIT = 1
-FARE = 1
 
-  attr_reader :balance, :entry_station, :current_journeys #:journey_hist
+
+  attr_reader :balance, :entry_station, :journey #:journey_hist
 
   def initialize
     @balance = 0
+    @journey = Journey.new
+    @in_use = false
     # @current_journeys = []
     # @journey_hist = {}
     # @counter = 0
@@ -25,27 +28,25 @@ FARE = 1
   def touch_in(entry_station)
     fail 'not enough money on card' if min_limit
     # tracking
+
     @in_use = true
     @entry_station = entry_station
-    @journey = new_instance
     @journey.start(@entry_station)
+
     # @current_journeys << @entry_station
   end
 
   def touch_out(exit_station)
-    deduct(FARE)
     @in_use = false
     @exit_station = exit_station
     @journey.end(@exit_station)
+    deduct(journey.fare)
+    journey.clear_journey
     # @current_journeys << @exit_station
     # journey_log
   end
 
 private
-
-  def new_instance
-    Journey.new
-  end
 
   def deduct(amount)
     @balance -= amount

@@ -16,5 +16,28 @@ describe Journey do
      end
    end
 
+   it 'calculates penalty fare' do
+     journey.start(entry_station)
+     expect(journey.fare).to eq 6
+   end
+
+   it 'knows when a journy is not complete' do
+     journey.start(entry_station)
+     expect(journey.complete).to eq false
+   end
+
+   it 'knows when a journy is complete' do
+     journey.start(entry_station)
+     journey.start(exit_station)
+     expect(journey.complete).to eq true
+   end
+
+   it 'completes journey if exit with no station given' do
+    journey.start(entry_station)
+    journey.start(entry_station)
+    expect(journey.complete).to eq true
+  end
+
+
 
 end

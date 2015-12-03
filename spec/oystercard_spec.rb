@@ -58,11 +58,11 @@ let(:exit_station2) {double :station}
       expect { oystercard.touch_in(entry_station) }.to raise_error 'not enough money on card'
     end
 
-    it 'takes off fare on touch out' do
-      oystercard.top_up(50)
-      oystercard.touch_in(entry_station)
-      expect{ oystercard.touch_out(exit_station) }.to change{ oystercard.balance }.by(-Oystercard::FARE)
-    end
+    # it 'takes off fare on touch out' do
+    #   oystercard.top_up(50)
+    #   oystercard.touch_in(entry_station)
+    #   expect{ oystercard.touch_out(exit_station) }.to change{ oystercard.balance }.by(-Oystercard::MIN_LIMIT)
+    # end
 
     it 'stores the entry station' do
       oystercard.top_up(20)
@@ -79,6 +79,11 @@ let(:exit_station2) {double :station}
       expect(oystercard).not_to be_in_journey
     end
 
+    it 'deducts penalty fare' do
+      oystercard.top_up(50)
+      expect{ oystercard.touch_out(exit_station) }.
+      to change {oystercard.balance}.by(-Journey::PENALTY_FARE)
   end
-  
+
+end
 end

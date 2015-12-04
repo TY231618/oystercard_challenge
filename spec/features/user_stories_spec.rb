@@ -15,7 +15,7 @@ describe "user stories" do
  # As a customer
  # I want to add money to my card
  it "So that I can keep using public transport, I need to be able to top up" do
-   expect {oyster.top_up(10)}.not_to raise_error
+   expect {oyster.top_up(10)}.to change{oyster.balance}.by(10)
  end
 
  # In order to protect my money from theft or loss
@@ -25,7 +25,7 @@ describe "user stories" do
  it 'So that I don\'t exceed my spending limit, I want a maximum on my card' do
 
    oyster.top_up(90)
-   expect {oyster.top_up(1)}.to raise_error
+   expect {oyster.top_up(1)}.to raise_error "card limit of #{Oystercard::MAXIMUM_BALANCE} exceeded"
  end
 
   #  In order to pay for my journey
@@ -34,7 +34,7 @@ describe "user stories" do
   it 'So that user can pay for the journey, card needs to deduct fare from the card' do
 
     oyster.top_up(20)
-    expect {oyster.deduct(5)}.not_to raise_error
+    expect {oyster.deduct(5)}.to change{oyster.balance}.by(-5)
   end
 
   # In order to get through the barriers.
@@ -46,17 +46,12 @@ describe "user stories" do
   # I need to have the minimum amount (£1) for a single journey.
   it 'So that user can pay for the journey, should prevent user to touch in when balance is low' do
 
-    expect {oyster.touch_in(station)}.to raise_error
+    expect {oyster.touch_in(station)}.to raise_error "Your balance is too low. Please top up!"
   end
 
   #   In order to pay for my journey
   # As a customer
   # When my journey is complete, I need the correct amount deducted from my card
-  it 'So that user can pay for the journey, the correct amount should be deducted on touch out' do
-
-    oyster.top_up(5)
-    expect {oyster.touch_out(station)}.to_not raise_error
-  end
 
   # In order to pay for my journey
   # As a customer

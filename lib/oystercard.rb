@@ -22,10 +22,15 @@ class Oystercard
   end
 
   def touch_out(station)
+    if journey.current_journey[:entry_station] == nil
+      @balance -= 6
+      raise "Touch in not detected"
+    else
     deduct(MINIMUM_FARE)
     journey.update_exit(station)
     update_history(journey)
     new_journey
+    end
   end
 
   def update_history(journey)

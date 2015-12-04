@@ -87,12 +87,9 @@ describe Oystercard do
 
     describe '#penalty_fare' do
 
-      it 'should raise an error, on touch out, if there is no entry station in the current journey' do
-        expect {card.touch_out(exit_station)}.to raise_error "Touch in not detected"
-      end
-
       it 'should deduct penalty_fare, on touch out, if there is no entry station in the current journey' do
-        expect {card.touch_out(exit_station)}.to change{card.balance}.by(6)
+
+        expect {card.touch_out(station)}.to change{card.balance}.by(-6)
       end
 
     end

@@ -17,4 +17,9 @@ describe Journey do
     expect(oyster.journey.current_journey[:entry_station]).to eq 'Brixton'
   end
 
+  describe '#penalty_fare' do
+    it 'returns true if only an entry or exit station is given' do
+      expect(journey.penalty?).to eq true
+    end
+  end
 end

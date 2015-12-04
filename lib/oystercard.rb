@@ -5,6 +5,7 @@ class Oystercard
 
   MAXIMUM_BALANCE = 90
   MINIMUM_FARE = 1
+  PENALTY_FARE = 6
 
   def initialize
     @balance = 0
@@ -18,18 +19,19 @@ class Oystercard
 
   def touch_in(station)
     fail "Your balance is too low. Please top up!" if balance < MINIMUM_FARE
+    penalty_deduction unless journey.complete?
     journey.update_entry(station)
   end
 
   def touch_out(station)
-    if journey.current_journey[:entry_station] == nil
-      @balance -= 6
-      raise "Touch in not detected"
-    else
-    deduct(MINIMUM_FARE)
     journey.update_exit(station)
-    update_history(journey)
-    new_journey
+    if journey.penalty?
+      penalty_deduction
+    else
+      deduct(MINIMUM_FARE)
+      journey.update_exit(station)
+      update_history(journey)
+      new_journey
     end
   end
 
@@ -55,6 +57,11 @@ class Oystercard
   end
 
   private
+
+  def penalty_deduction
+    deduct(PENALTY_FARE)
+    new_journey
+  end
 
   def limit_exceeded?(amount)
     amount + balance() > MAXIMUM_BALANCE

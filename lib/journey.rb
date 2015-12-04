@@ -1,11 +1,10 @@
 require_relative 'oystercard'
 
 class Journey
-  # extend Fowardable
 
   attr_accessor :current_journey
 
-  def initialize(journey_klass = Journey)
+  def initialize
     @current_journey = {}
   end
 
